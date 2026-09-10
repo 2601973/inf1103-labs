@@ -5,9 +5,4 @@ while True:
     if user_input.lower() == "quit":
         print("Goodbye, exiting program.")
         break
-
-    if not user_input.isdigit():
-        print("Error: That is not a valid number.")
-        continue
-    stock = int(user_input)
     
