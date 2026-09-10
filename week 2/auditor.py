@@ -9,4 +9,5 @@ while True:
         print("Error: That is not a valid number.")
         continue
     stock = int(user_input)
+    inventory += stock
     
