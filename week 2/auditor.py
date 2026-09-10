@@ -5,4 +5,4 @@ while True:
     if user_input.lower() == "quit":
         print("Goodbye, exiting program.")
         break
-    
+    stock = int(user_input)
