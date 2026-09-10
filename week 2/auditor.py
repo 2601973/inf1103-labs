@@ -10,4 +10,12 @@ while True:
         continue
     stock = int(user_input)
     inventory += stock
+
+    if inventory >500:
+        print(f"Inventory has exceeded the 500 unit limit! Current inventory: {inventory}")
+        break
+    elif inventory == 500:
+        print("Inventory has reached exactly 500 units.")
+    else:
+        print(f"Current Total: {inventory}")
     
