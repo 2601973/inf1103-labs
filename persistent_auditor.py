@@ -5,6 +5,10 @@ def load_inventory():
             return inventory
     except FileNotFoundError:
         return 0
+def save_inventory(inventory, transaction_history):
+    with open("inventory.txt", "w") as file:
+        file.write(str(inventory) + "\n")
+        file.write(str(transaction_history))
 
 def get_valid_input():
     user_input = input(
@@ -44,6 +48,7 @@ while True:
     stock = get_valid_input()
 
     if stock == "quit":
+        save_inventory(inventory, transaction_history)
         print("Goodbye, exiting program.")
         break
 
