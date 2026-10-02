@@ -1,90 +1,92 @@
-def load_inventory():
-    try:
-        with open("inventory.txt", "r") as file:
-            inventory = int(file.readline().strip())
-
-            history_line = file.readline().strip()
-            history_line = history_line.strip("[]")
-
-            if history_line:
-                transaction_history = [
-                    int(value) for value in history_line.split(",")
-                ]
-            else:
-                transaction_history = []
-
-            return inventory, transaction_history
-
-    except FileNotFoundError:
-        return 0, []
-    
-def save_inventory(inventory, transaction_history):
-    with open("inventory.txt", "w") as file:
-        file.write(str(inventory) + "\n")
-        file.write(str(transaction_history))
-
-def get_valid_input():
-    user_input = input(
-        "Enter stock quantity (or type 'quit' to exit): "
-    ).strip()
-
-    if user_input.lower() == "quit":
-        return "quit"
-
-    if not user_input.isdigit():
-        print("Error: That is not a valid number.")
-        return None
-
-    return int(user_input)
+inventory = [
+    {"id": "P001", "name": "Laptop", "price": 1200.00, "stock": 15},
+    {"id": "P002", "name": "Mouse", "price": 25.50, "stock": 40},
+    {"id": "P003", "name": "Keyboard", "price": 45.00, "stock": 25},
+]
 
 
-def process_delivery(current_total, new_value):
-    return current_total + new_value
+def display_all(inventory):
+    if not inventory:
+        print("Inventory is empty.")
+        return
 
+    print("\nCurrent Inventory")
+    print("-" * 60)
 
-def calculate_tax(amount):
-    return amount * 0.10
-
-
-def generate_report(total_units, failed_attempts):
-    print(
-        f"\nTotal Units Processed: {total_units}"
-        f"\nNumber of Failed Entries: {failed_attempts}"
-    )
-
-inventory, transaction_history = load_inventory()
-failed_entries = 0
-deliveries_processed = 0
-
-while True:
-    stock = get_valid_input()
-
-    if stock == "quit":
-        save_inventory(inventory, transaction_history)
-        print("Goodbye, exiting program.")
-        break
-
-    if stock is None:
-        failed_entries += 1
-        continue
-
-    inventory = process_delivery(inventory, stock)
-    transaction_history.append(stock)
-    tax = calculate_tax(stock)
-    deliveries_processed += 1
-
-    print(f"Tax for this delivery: {tax:.2f}")
-
-    if inventory > 500:
+    for product in inventory:
         print(
-            "Inventory has exceeded the 500 unit limit! "
-            f"Current inventory: {inventory}"
+            f"ID: {product['id']} | "
+            f"Name: {product['name']} | "
+            f"Price: ${product['price']:.2f} | "
+            f"Stock: {product['stock']}"
         )
-    elif inventory == 500:
-        print("Inventory has reached exactly 500 units.")
-    else:
-        print(f"Current Total: {inventory}")
+
+    print("-" * 60)
 
 
-generate_report(inventory, failed_entries)
-print(f"Total Deliveries Processed: {deliveries_processed}")
+display_all(inventory)
+
+def search_product(inventory):
+    while True:
+        product_id = input(
+            "Enter Product ID (or 'cancel' to go back): "
+        ).strip().upper()
+
+        if product_id == "CANCEL":
+            return
+
+        for product in inventory:
+            if product["id"] == product_id:
+                print("\nProduct Found")
+                print("-" * 40)
+                print(f"ID: {product['id']}")
+                print(f"Name: {product['name']}")
+                print(f"Price: ${product['price']:.2f}")
+                print(f"Stock: {product['stock']}")
+                return
+
+        print("Product not found. Please try again.")
+
+def update_stock(inventory):
+    while True:
+        product_id = input(
+            "Enter Product ID (or 'cancel' to go back): "
+        ).strip().upper()
+
+        if product_id == "CANCEL":
+            return
+
+        for product in inventory:
+            if product["id"] == product_id:
+                print(f"\nName: {product['name']}")
+                print(f"Current Stock: {product['stock']}")
+
+                while True:
+                    quantity = input(
+                        "New Stock Quantity (or 'cancel'): "
+                    ).strip()
+
+                    if quantity.upper() == "CANCEL":
+                        return
+
+                    try:
+                        new_stock = int(quantity)
+                    except ValueError:
+                        print("Please enter a whole number.")
+                        continue
+
+                    if new_stock < 0:
+                        print("Stock cannot be negative.")
+                        continue
+
+                    product["stock"] = new_stock
+                    print("Stock updated successfully!")
+                    return
+
+        print("Product not found. Please try again.")
+
+
+update_stock(inventory)
+display_all(inventory)
+
+search_product(inventory)
