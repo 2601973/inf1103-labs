@@ -102,8 +102,63 @@ def add_product(inventory):
             print("That Product ID already exists. Please try again.")
             continue
 
-        print(f"Product ID {product_id} is available.")
-        return
+        break
+
+    while True:
+        name = input("Product Name (or 'cancel'): ").strip()
+
+        if name.lower() == "cancel":
+            return
+
+        if name:
+            break
+
+        print("Product name cannot be empty.")
+
+    while True:
+        value = input("Price (or 'cancel'): ").strip()
+
+        if value.lower() == "cancel":
+            return
+
+        try:
+            price = float(value)
+        except ValueError:
+            print("Please enter a valid price.")
+            continue
+
+        if not 0 <= price < float("inf"):
+            print("Please enter a finite, non-negative price.")
+            continue
+
+        break
+
+    while True:
+        value = input("Stock Quantity (or 'cancel'): ").strip()
+
+        if value.lower() == "cancel":
+            return
+
+        try:
+            stock = int(value)
+        except ValueError:
+            print("Please enter a whole number.")
+            continue
+
+        if stock < 0:
+            print("Stock cannot be negative.")
+            continue
+
+        break
+
+    inventory.append({
+        "id": product_id,
+        "name": name,
+        "price": price,
+        "stock": stock,
+    })
+
+    print("Product added successfully!")
 
 
 add_product(inventory)
