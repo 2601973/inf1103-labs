@@ -85,7 +85,28 @@ def update_stock(inventory):
 
         print("Product not found. Please try again.")
 
+def add_product(inventory):
+    while True:
+        product_id = input(
+            "New Product ID (or 'cancel'): "
+        ).strip().upper()
 
+        if product_id == "CANCEL":
+            return
+
+        if not product_id:
+            print("Product ID cannot be empty.")
+            continue
+
+        if any(product["id"] == product_id for product in inventory):
+            print("That Product ID already exists. Please try again.")
+            continue
+
+        print(f"Product ID {product_id} is available.")
+        return
+
+
+add_product(inventory)
 update_stock(inventory)
 display_all(inventory)
 
