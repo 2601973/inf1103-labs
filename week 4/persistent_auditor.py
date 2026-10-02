@@ -1,9 +1,21 @@
-inventory = [
-    {"id": "P001", "name": "Laptop", "price": 1200.00, "stock": 15},
-    {"id": "P002", "name": "Mouse", "price": 25.50, "stock": 40},
-    {"id": "P003", "name": "Keyboard", "price": 45.00, "stock": 25},
-]
+import json
+from pathlib import Path
 
+
+INVENTORY_FILE = Path(__file__).with_name("inventory.json")
+
+
+def load_inventory():
+    if not INVENTORY_FILE.exists():
+        print("inventory.json not found. Starting with empty inventory.")
+        return []
+    
+    print("inventory.json found.")
+    with INVENTORY_FILE.open("r", encoding="utf-8") as file:
+        inventory = json.load(file)
+
+    print("Inventory loaded successfully.")
+    return inventory
 
 def display_all(inventory):
     if not inventory:
@@ -23,8 +35,6 @@ def display_all(inventory):
 
     print("-" * 60)
 
-
-display_all(inventory)
 
 def search_product(inventory):
     while True:
@@ -161,6 +171,8 @@ def add_product(inventory):
     print("Product added successfully!")
 
 def main():
+    inventory = load_inventory()
+
     while True:
         print("\n----------- MENU -----------")
         print("1. Display All Products")
