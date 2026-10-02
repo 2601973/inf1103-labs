@@ -29,7 +29,7 @@ def display_all(inventory):
         return
 
     print("\nCurrent Inventory")
-    print("-" * 60)
+    print("-" * 48)
 
     for product in inventory:
         print(
@@ -39,10 +39,11 @@ def display_all(inventory):
             f"Stock: {product['stock']}"
         )
 
-    print("-" * 60)
+    print("-" * 48)
 
 
 def search_product(inventory):
+    print("\nSearch Product")
     while True:
         product_id = input(
             "Enter Product ID (or 'cancel' to go back): "
@@ -54,16 +55,18 @@ def search_product(inventory):
         for product in inventory:
             if product["id"] == product_id:
                 print("\nProduct Found")
-                print("-" * 40)
+                print("-" * 48)
                 print(f"ID: {product['id']}")
                 print(f"Name: {product['name']}")
                 print(f"Price: ${product['price']:.2f}")
                 print(f"Stock: {product['stock']}")
+                print("-" * 48)
                 return
 
         print("Product not found. Please try again.")
 
 def update_stock(inventory):
+    print("\nUpdate Stock")
     while True:
         product_id = input(
             "Enter Product ID (or 'cancel' to go back): "
@@ -74,7 +77,8 @@ def update_stock(inventory):
 
         for product in inventory:
             if product["id"] == product_id:
-                print(f"\nName: {product['name']}")
+                print("\nProduct Found:")
+                print(f"Name: {product['name']}")
                 print(f"Current Stock: {product['stock']}")
 
                 while True:
@@ -102,6 +106,7 @@ def update_stock(inventory):
         print("Product not found. Please try again.")
 
 def add_product(inventory):
+    print("\nAdd New Product")
     while True:
         product_id = input(
             "New Product ID (or 'cancel'): "
@@ -177,8 +182,11 @@ def add_product(inventory):
     print("Product added successfully!")
 
 def main():
-    inventory = load_inventory()
+    print("=" * 40)
+    print("INVENTORY MANAGEMENT SYSTEM")
+    print("=" * 40)
 
+    inventory = load_inventory()
     while True:
         print("\n----------- MENU -----------")
         print("1. Display All Products")
