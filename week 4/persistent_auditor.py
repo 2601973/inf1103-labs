@@ -160,9 +160,35 @@ def add_product(inventory):
 
     print("Product added successfully!")
 
+def main():
+    while True:
+        print("\n----------- MENU -----------")
+        print("1. Display All Products")
+        print("2. Add Product")
+        print("3. Update Stock")
+        print("4. Search Product")
+        print("5. Save Inventory")
+        print("6. Exit")
+        print("----------------------------")
 
-add_product(inventory)
-update_stock(inventory)
-display_all(inventory)
+        option = input("Enter option: ").strip()
 
-search_product(inventory)
+        if option == "1":
+            display_all(inventory)
+        elif option == "2":
+            add_product(inventory)
+        elif option == "3":
+            update_stock(inventory)
+        elif option == "4":
+            search_product(inventory)
+        elif option == "5":
+            print("Saving is not implemented yet.")
+        elif option == "6":
+            print("Thank you for using Inventory Management System.")
+            break
+        else:
+            print("Invalid option. Please enter 1 to 6.")
+
+
+if __name__ == "__main__":
+    main()
