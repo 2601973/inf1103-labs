@@ -1,49 +1,9 @@
-import json
-from pathlib import Path
-
-
-INVENTORY_FILE = Path(__file__).with_name("inventory.json")
-
-
-def load_inventory():
-    if not INVENTORY_FILE.exists():
-        print("inventory.json not found. Starting with empty inventory.")
-        return []
-    
-    print("inventory.json found.")
-    with INVENTORY_FILE.open("r", encoding="utf-8") as file:
-        inventory = json.load(file)
-
-    print("Inventory loaded successfully.")
-    return inventory
-
-def save_inventory(inventory):
-    with INVENTORY_FILE.open("w", encoding="utf-8") as file:
-        json.dump(inventory, file, indent=4)
-
-    print("Inventory saved successfully to inventory.json.")
-
-def display_all(inventory):
-    if not inventory:
-        print("Inventory is empty.")
-        return
-
-    print("\nCurrent Inventory")
-    print("-" * 48)
-
-    for product in inventory:
-        print(
-            f"ID: {product['id']} | "
-            f"Name: {product['name']} | "
-            f"Price: ${product['price']:.2f} | "
-            f"Stock: {product['stock']}"
-        )
-
-    print("-" * 48)
-
+from file_handling import load_inventory, save_inventory
+from product import Product
 
 def search_product(inventory):
     print("\nSearch Product")
+
     while True:
         product_id = input(
             "Enter Product ID (or 'cancel' to go back): "
@@ -52,21 +12,19 @@ def search_product(inventory):
         if product_id == "CANCEL":
             return
 
-        for product in inventory:
-            if product["id"] == product_id:
-                print("\nProduct Found")
-                print("-" * 48)
-                print(f"ID: {product['id']}")
-                print(f"Name: {product['name']}")
-                print(f"Price: ${product['price']:.2f}")
-                print(f"Stock: {product['stock']}")
-                print("-" * 48)
-                return
+        product = inventory.search_product(product_id)
+
+        if product is not None:
+            print("\nProduct Found")
+            product.display_information()
+            return
 
         print("Product not found. Please try again.")
+
 
 def update_stock(inventory):
     print("\nUpdate Stock")
+
     while True:
         product_id = input(
             "Enter Product ID (or 'cancel' to go back): "
@@ -75,38 +33,40 @@ def update_stock(inventory):
         if product_id == "CANCEL":
             return
 
-        for product in inventory:
-            if product["id"] == product_id:
-                print("\nProduct Found:")
-                print(f"Name: {product['name']}")
-                print(f"Current Stock: {product['stock']}")
+        product = inventory.search_product(product_id)
 
-                while True:
-                    quantity = input(
-                        "New Stock Quantity (or 'cancel'): "
-                    ).strip()
+        if product is None:
+            print("Product not found. Please try again.")
+            continue
 
-                    if quantity.upper() == "CANCEL":
-                        return
+        product.display_information()
 
-                    try:
-                        new_stock = int(quantity)
-                    except ValueError:
-                        print("Please enter a whole number.")
-                        continue
+        while True:
+            quantity = input(
+                "New Stock Quantity (or 'cancel'): "
+            ).strip()
 
-                    if new_stock < 0:
-                        print("Stock cannot be negative.")
-                        continue
+            if quantity.upper() == "CANCEL":
+                return
 
-                    product["stock"] = new_stock
-                    print("Stock updated successfully!")
-                    return
+            try:
+                new_stock = int(quantity)
+            except ValueError:
+                print("Please enter a whole number.")
+                continue
 
-        print("Product not found. Please try again.")
+            try:
+                product.update_stock(new_stock)
+            except ValueError as error:
+                print(error)
+                continue
+
+            print("Stock updated successfully!")
+            return
 
 def add_product(inventory):
     print("\nAdd New Product")
+
     while True:
         product_id = input(
             "New Product ID (or 'cancel'): "
@@ -119,7 +79,7 @@ def add_product(inventory):
             print("Product ID cannot be empty.")
             continue
 
-        if any(product["id"] == product_id for product in inventory):
+        if inventory.search_product(product_id) is not None:
             print("That Product ID already exists. Please try again.")
             continue
 
@@ -172,12 +132,8 @@ def add_product(inventory):
 
         break
 
-    inventory.append({
-        "id": product_id,
-        "name": name,
-        "price": price,
-        "stock": stock,
-    })
+    product = Product(product_id, name, price, stock)
+    inventory.add_product(product)
 
     print("Product added successfully!")
 
@@ -200,7 +156,7 @@ def main():
         option = input("Enter option: ").strip()
 
         if option == "1":
-            display_all(inventory)
+            inventory.display_all()
         elif option == "2":
             add_product(inventory)
         elif option == "3":
