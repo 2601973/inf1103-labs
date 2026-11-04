@@ -9,3 +9,6 @@ class PhysicalProduct(Product):
     def display_information(self):
         super().display_information()
         print(f"Weight: {self.__weight:.2f} kg")
+
+    def get_fulfilment_info(self):
+        return "This product requires physical shipping."
