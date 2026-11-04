@@ -1,5 +1,6 @@
 from file_handling import load_inventory, save_inventory
-from product import Product
+from physical_product import PhysicalProduct
+from digital_product import DigitalProduct
 
 def search_product(inventory):
     print("\nSearch Product")
@@ -68,6 +69,22 @@ def add_product(inventory):
     print("\nAdd New Product")
 
     while True:
+        print("1. Physical product")
+        print("2. Digital product")
+
+        product_type = input(
+            "Choose product type (or 'cancel'): "
+        ).strip().lower()
+
+        if product_type == "cancel":
+            return
+
+        if product_type in ("1", "2"):
+            break
+
+        print("Invalid choice. Please enter 1 or 2.")
+
+    while True:
         product_id = input(
             "New Product ID (or 'cancel'): "
         ).strip().upper()
@@ -132,7 +149,38 @@ def add_product(inventory):
 
         break
 
-    product = Product(product_id, name, price, stock)
+    if product_type == "1":
+        prompt = "Weight in kilograms (or 'cancel'): "
+    else:
+        prompt = "Download size in megabytes (or 'cancel'): "
+
+    while True:
+        value = input(prompt).strip()
+
+        if value.lower() == "cancel":
+            return
+
+        try:
+            extra_value = float(value)
+        except ValueError:
+            print("Please enter a valid number.")
+            continue
+
+        if not 0 < extra_value < float("inf"):
+            print("Please enter a finite number greater than zero.")
+            continue
+
+        break
+
+    if product_type == "1":
+        product = PhysicalProduct(
+            product_id, name, price, stock, extra_value
+        )
+    else:
+        product = DigitalProduct(
+            product_id, name, price, stock, extra_value
+        )
+
     inventory.add_product(product)
 
     print("Product added successfully!")

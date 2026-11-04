@@ -38,5 +38,21 @@
         "stock": 100,
         "type": "digital",
         "download_size": 8.5
+    },
+    {
+        "id": "P005",
+        "name": "USB Hub",
+        "price": 35.0,
+        "stock": 10,
+        "type": "physical",
+        "weight": 0.2
+    },
+    {
+        "id": "D002",
+        "name": "Python course",
+        "price": 49.9,
+        "stock": 100,
+        "type": "digital",
+        "download_size": 500.0
     }
 ]
