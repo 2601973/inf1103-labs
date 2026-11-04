@@ -51,7 +51,7 @@
         "id": "D002",
         "name": "Python course",
         "price": 49.9,
-        "stock": 100,
+        "stock": 96,
         "type": "digital",
         "download_size": 500.0
     }
