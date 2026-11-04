@@ -2,7 +2,8 @@ import json
 from pathlib import Path
 
 from inventory import Inventory
-from product import Product
+from physical_product import PhysicalProduct
+from digital_product import DigitalProduct
 
 
 INVENTORY_FILE = Path(__file__).with_name("inventory.json")
@@ -20,12 +21,29 @@ def load_inventory(file_path=INVENTORY_FILE):
         data = json.load(file)
 
     for item in data:
-        product = Product(
-            item["id"],
-            item["name"],
-            item["price"],
-            item["stock"],
-        )
+        product_type = item.get("type")
+
+        if product_type == "physical":
+            product = PhysicalProduct(
+                item["id"],
+                item["name"],
+                item["price"],
+                item["stock"],
+                item["weight"],
+            )
+        elif product_type == "digital":
+            product = DigitalProduct(
+                item["id"],
+                item["name"],
+                item["price"],
+                item["stock"],
+                item["download_size"],
+            )
+        else:
+            raise ValueError(
+                f"Unknown or missing product type: {product_type}"
+            )
+
         inventory.add_product(product)
 
     print("Inventory loaded successfully.")
