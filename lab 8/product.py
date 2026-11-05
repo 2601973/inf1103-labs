@@ -16,19 +16,19 @@ class Product(ABC):
         self.__supplier: Supplier = supplier
         self.update_stock(stock)
 
-    def get_product_id(self):
+    def get_product_id(self) -> str:
         return self.__product_id
 
-    def update_stock(self, quantity):
+    def update_stock(self, quantity: int) -> None:
         if type(quantity) is not int:
             raise ValueError("Stock must be a whole number.")
 
         if quantity < 0:
             raise ValueError("Stock cannot be negative.")
 
-        self.__stock = quantity
+        self.__stock: int = quantity    
 
-    def display_information(self):
+    def display_information(self) -> None:
         print(
             f"ID: {self.__product_id} | "
             f"Name: {self.__name} | "
@@ -36,16 +36,19 @@ class Product(ABC):
             f"Stock: {self.__stock}"
         )
 
-    def to_dict(self):
+    def to_dict(
+        self,
+    ) -> dict[str, str | float | int | dict[str, str]]:
         return {
             "id": self.__product_id,
             "name": self.__name,
             "price": self.__price,
             "stock": self.__stock,
+            "supplier": self.__supplier.to_dict(),
         }
     
     @abstractmethod
-    def get_fulfilment_info(self):
+    def get_fulfilment_info(self) -> str:
         pass
 
     def get_supplier(self) -> Supplier:

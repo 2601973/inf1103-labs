@@ -15,3 +15,9 @@ class Supplier:
             f"Name: {self.__name} | "
             f"Email: {self.__contact_email}"
         )
+    def to_dict(self) -> dict[str, str]:
+        return {
+            "supplier_id": self.__supplier_id,
+            "name": self.__name,
+            "contact_email": self.__contact_email,
+        }
