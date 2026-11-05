@@ -21,3 +21,5 @@ class OrderLine:
             f"Quantity: {self.__quantity} | "
             f"Subtotal: ${self.calculate_subtotal():.2f}"
         )
+    def get_product(self) -> Product:
+        return self.__product
